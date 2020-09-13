@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "lda-admin-service"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1bc1r8xszn74q"
+s3_prefix = "lda-admin-service"
+region = "eu-west-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+

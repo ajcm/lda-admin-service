@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  lda-admin-service
+
+  Sample SAM Template for lda-users-service
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+  Api:
+    # enable CORS; to make more specific, change the origin wildcard
+    # to a particular domain name, e.g. "'www.example.com'"
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
+
+Resources:
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'OPTIONS,GET,POST,PUT,DELETE'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,x-amz-security-token'"
+        AllowOrigin: "'*'"
+      GatewayResponses:
+        DEFAULT_4XX:
+          ResponseParameters:
+              Headers:
+                Access-Control-Allow-Origin: "'*'"
+                Access-Control-Allow-Headers: "'*'"
+                Access-Control-Allow-Methods: "'*'"
+      Auth:
+       Authorizers:
+        MyLambdaTokenAuth:
+          FunctionArn: arn:aws:lambda:eu-west-1:042746780522:function:authorizationFn            
+          Identity:
+            Header: Authorization # OPTIONAL; Default: 'Authorization'            
+            ReauthorizeEvery: 300 # OPTIONAL; Service Default: 300n
+
+
+
+  IdentityFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: app/
+      Handler: identity.index
+      Runtime: nodejs12.x
+      Events:
+        GetUserDetails:
+          Type: Api
+          Properties:
+            Path: /id/{section}
+            Method: get
+            Auth:
+              Authorizer: MyLambdaTokenAuth
+            RestApiId: !Ref MyApi
+
+  
+
+
+
+
+
+
+
