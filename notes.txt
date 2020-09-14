@@ -1,0 +1,9 @@
+
+sam init
+sam build
+sam local start-api --host 192.168.1.4
+
+sam deploy --no-confirm-changeset
+
+sam build && sam local start-api --host 192.168.1.2
+sam deploy --no-confirm-changeset
