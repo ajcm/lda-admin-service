@@ -42,8 +42,7 @@ Resources:
             Header: Authorization # OPTIONAL; Default: 'Authorization'            
             ReauthorizeEvery: 300 # OPTIONAL; Service Default: 300n
 
-
-
+            
   IdentityFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -60,6 +59,37 @@ Resources:
               Authorizer: MyLambdaTokenAuth
             RestApiId: !Ref MyApi
 
+  UsersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: app/
+      Handler: users.index
+      Runtime: nodejs12.x
+      Events:
+        GetUserDetails:
+          Type: Api
+          Properties:
+            Path: /users/{section}
+            Method: get
+            Auth:
+              Authorizer: MyLambdaTokenAuth
+            RestApiId: !Ref MyApi
+
+  UsersActionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: app/
+      Handler: users.actions
+      Runtime: nodejs12.x
+      Events:
+        GetUserDetails:
+          Type: Api
+          Properties:
+            Path: /users/action
+            Method: post
+            Auth:
+              Authorizer: MyLambdaTokenAuth
+            RestApiId: !Ref MyApi
   
 
 

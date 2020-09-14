@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  lda-users-service
+  lda-admin-service
 
   Sample SAM Template for lda-users-service
   
@@ -43,86 +43,59 @@ Resources:
             ReauthorizeEvery: 300 # OPTIONAL; Service Default: 300n
 
 
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: app/
-      Handler: hello.index
-      Runtime: nodejs12.x
-      Events:
-        HelloWorld:
-          Type: Api 
-          Properties:
-            Path: /hello
-            Method: get
-            RestApiId: !Ref MyApi
 
-  AuthTestFunction:
-    Type: AWS::Serverless::Function 
+  IdentityFunction:
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: app/
-      Handler: hello.index
+      Handler: identity.index
       Runtime: nodejs12.x
       Events:
-        HelloWorld:
-          Type: Api 
+        GetUserDetails:
+          Type: Api
           Properties:
-            Path: /test
+            Path: /id/{section}
             Method: get
             Auth:
               Authorizer: MyLambdaTokenAuth
             RestApiId: !Ref MyApi
 
-
-
-
-
-
-
-
-
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function 
+  UsersFunction:
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: app/
-      Handler: hello.index
+      Handler: users.index
       Runtime: nodejs12.x
       Events:
-        HelloWorld:
-          Type: Api 
+        GetUserDetails:
+          Type: Api
           Properties:
-            Path: /hello
+            Path: /users/{section}
             Method: get
+            Auth:
+              Authorizer: MyLambdaTokenAuth
             RestApiId: !Ref MyApi
 
-  EchoFunction:
-    Type: AWS::Serverless::Function 
+  UsersActionFunction:
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: app/
-      Handler: hello.echo
+      Handler: users.actions
       Runtime: nodejs12.x
       Events:
-        HelloWorld:
-          Type: Api 
+        GetUserDetails:
+          Type: Api
           Properties:
-            Path: /echo
-            Method: get
-            RestApiId: !Ref MyApi
-
-
-  AuthTestFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: app/
-      Handler: hello.index
-      Runtime: nodejs12.x
-      Events:
-        HelloWorld:
-          Type: Api 
-          Properties:
-            Path: /test
-            Method: get
+            Path: /users/action
+            Method: post
             Auth:
               Authorizer: MyLambdaTokenAuth
             RestApiId: !Ref MyApi
   
+
+
+
+
+
+
+

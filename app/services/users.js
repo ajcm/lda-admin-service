@@ -10,4 +10,11 @@ exports.listUsers = (callback) => {
 }
 
 
+exports.deleteUser = (Username,callback) => {
+	const cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider();
+
+	cognitoidentityserviceprovider.adminDeleteUser({UserPoolId,Username},callback)
+
+}
+
 
